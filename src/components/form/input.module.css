@@ -1,0 +1,21 @@
+.container {
+	position: relative;
+	margin: 6px auto;
+}
+.input {
+	padding: 9.5px;
+	overflow: hidden;
+	background-color: var(--body);
+	width: 100%;
+	outline: none;
+	border: 1px solid var(--darkBody);
+	border-radius: var(--borderRadius);
+}
+.label {
+	position: absolute;
+	color: var(--darkerBody);
+	font-size: 0.75rem;
+	top: 11px;
+	bottom: 0;
+	left: 8px;
+}
