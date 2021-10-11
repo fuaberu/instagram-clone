@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../../components/form/Input';
 import style from './homepage.module.css';
+import backgroundImage from '../../images/homepage/login-page-background.png';
+import loginPage1 from '../../images/homepage/login-page-1.jpg';
+import loginPage2 from '../../images/homepage/login-page-2.jpg';
+import loginPage3 from '../../images/homepage/login-page-3.jpg';
+import loginPage4 from '../../images/homepage/login-page-4.jpg';
+import loginPage5 from '../../images/homepage/login-page-5.jpg';
 
 const Homepage = () => {
 	const [show, setShow] = useState('Show');
+	const [imageShow, setImageShow] = useState(1);
 
 	const showPassword = () => {
 		if (show === 'Show') {
@@ -12,9 +19,67 @@ const Homepage = () => {
 			setShow('Show');
 		}
 	};
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (imageShow >= 5) {
+				setImageShow(1);
+			} else {
+				setImageShow(imageShow + 1);
+			}
+		}, 4000);
+		return () => clearInterval(interval);
+	});
+
 	return (
 		<section className={style.section}>
-			<div className={style.left}></div>
+			<div className={style.left}>
+				<img className={style.backgroundImage} src={backgroundImage} alt="" />
+				<img
+					className={
+						imageShow === 1
+							? style.absoluteImage
+							: `${style.absoluteImage} ${style.hidden}`
+					}
+					src={loginPage1}
+					alt=""
+				/>
+				<img
+					className={
+						imageShow === 2
+							? style.absoluteImage
+							: `${style.absoluteImage} ${style.hidden}`
+					}
+					src={loginPage2}
+					alt=""
+				/>
+				<img
+					className={
+						imageShow === 3
+							? style.absoluteImage
+							: `${style.absoluteImage} ${style.hidden}`
+					}
+					src={loginPage3}
+					alt=""
+				/>
+				<img
+					className={
+						imageShow === 4
+							? style.absoluteImage
+							: `${style.absoluteImage} ${style.hidden}`
+					}
+					src={loginPage4}
+					alt=""
+				/>
+				<img
+					className={
+						imageShow === 5
+							? style.absoluteImage
+							: `${style.absoluteImage} ${style.hidden}`
+					}
+					src={loginPage5}
+					alt=""
+				/>
+			</div>
 			<div className={style.right}>
 				<div className={style.wrapper}>
 					<h1>
@@ -49,7 +114,7 @@ const Homepage = () => {
 						</div>
 						<button className={style.logFace}>Log in with Facebook</button>
 						<a
-							href="#"
+							href="/accounts/password/reset/"
 							target="_blank"
 							rel="noopener noreferrer"
 							className={style.forgotPassword}
@@ -65,7 +130,7 @@ const Homepage = () => {
 							Sign up
 						</a>
 					</h3>
-				</div>
+                </div>
 			</div>
 		</section>
 	);
