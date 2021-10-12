@@ -1,7 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc, addDoc, collection } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	sendEmailVerification,
+} from 'firebase/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,51 +21,55 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore();
-const auth = getAuth();
+export const auth = getAuth();
 
 // sign up
 export const signUpUser = (email: string, password: string) => {
-	createUserWithEmailAndPassword(auth, email, password)
-		.then((userCredential) => {
-			// Signed in
-			console.log(userCredential.user);
-		})
-		.catch((error) => {
-			console.log(error.message);
-		});
+	try {
+		const user = createUserWithEmailAndPassword(auth, email, password);
+		console.log(user);
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 // users profiles
-interface usersAuth {
+export interface usersAuth {
 	uid: string;
 	userName: string;
 	displayName: string;
 	email: string;
 	following: number[];
 	followers: number[];
-	createdDate: Date;
+	createdDate: number;
 }
 
 export const handleUserProfile = async (usersAuth: usersAuth) => {
 	if (!usersAuth) return;
-	const { uid, displayName, email, userName } = usersAuth;
-
-	const userRef = doc(db, 'users', `${uid}`);
+	const userRef = doc(db, 'users', `${usersAuth.uid}`);
 	const docSnap = await getDoc(userRef);
 
 	if (!docSnap.exists()) {
 		// if user do not exist
-		const time = Date.now();
 		try {
 			const docRef = await addDoc(collection(db, 'users'), {
-				userName: userName,
-				name: displayName,
-				email: email,
+				userName: usersAuth.userName,
+				name: usersAuth.displayName,
+				email: usersAuth.email,
 				following: [],
 				followers: [],
-				createdDate: time,
+				createdDate: Date.now(),
 			});
+			//send the verification email
+			if (auth.currentUser) {
+				sendEmailVerification(auth.currentUser).then(() => {
+					// Email verification sent!
+					// ...
+					alert(`an email was sent to the email: ${usersAuth.email}`);
+				});
+			}
 
 			console.log('Document written with ID: ', docRef.id);
 		} catch (e) {
