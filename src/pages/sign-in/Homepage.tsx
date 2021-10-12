@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Input from '../../components/form/Input';
+import InputPassword from '../../components/form/InputPassword';
+import FormContainer from '../../components/form/FormContainer';
 import style from './homepage.module.css';
 import backgroundImage from '../../images/homepage/login-page-background.png';
 import loginPage1 from '../../images/homepage/login-page-1.jpg';
@@ -7,18 +9,18 @@ import loginPage2 from '../../images/homepage/login-page-2.jpg';
 import loginPage3 from '../../images/homepage/login-page-3.jpg';
 import loginPage4 from '../../images/homepage/login-page-4.jpg';
 import loginPage5 from '../../images/homepage/login-page-5.jpg';
+import { auth } from '../../firebase/firebaseConfig';
+import { signInWithEmailAndPassword } from '@firebase/auth';
+import { Link } from 'react-router-dom';
+import OrDivider from '../../components/form/orDivider/OrDivider';
+import SubmitBtn from '../../components/form/SubmitBtn/SubmitBtn';
+import { useHistory } from 'react-router';
 
 const Homepage = () => {
-	const [show, setShow] = useState('Show');
+	const [userName, setUserName] = useState('');
+	const [password, setPassword] = useState('');
 	const [imageShow, setImageShow] = useState(1);
 
-	const showPassword = () => {
-		if (show === 'Show') {
-			setShow('Hide');
-		} else {
-			setShow('Show');
-		}
-	};
 	useEffect(() => {
 		const interval = setInterval(() => {
 			if (imageShow >= 5) {
@@ -29,6 +31,26 @@ const Homepage = () => {
 		}, 4000);
 		return () => clearInterval(interval);
 	});
+
+	//firebase
+	const resetForm = () => {
+		setUserName('');
+		setPassword('');
+	};
+
+	let history = useHistory();
+
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		try {
+			const user = await signInWithEmailAndPassword(auth, userName, password);
+			console.log(user);
+			resetForm();
+			history.push('/feed');
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 	return (
 		<section className={style.section}>
@@ -81,8 +103,8 @@ const Homepage = () => {
 				/>
 			</div>
 			<div className={style.right}>
-				<div className={style.wrapper}>
-					<h1>
+				<FormContainer
+					img={
 						<svg
 							className={style.svg}
 							xmlns="http://www.w3.org/2000/svg"
@@ -93,44 +115,33 @@ const Homepage = () => {
 								fill="#231e1f"
 							/>
 						</svg>
-					</h1>
-					<div className={style.signIn}>
-						<form className={style.form}>
-							<Input type="email" label="Phone number, username, or email" />
-							<div className={style.container}>
-								<Input type={show === 'Hide' ? 'text' : 'password'} label="Password" />
-								<button type="button" className={style.showBtn} onClick={showPassword}>
-									{show}
-								</button>
-							</div>
-							<button type="submit" className={style.logInBtn}>
-								Log In
-							</button>
-						</form>
-						<div className={style.orContainer}>
-							<div className={style.line}></div>
-							<div className={style.or}>OR</div>
-							<div className={style.line}></div>
-						</div>
-						<button className={style.logFace}>Log in with Facebook</button>
-						<a
-							href="/accounts/password/reset/"
-							target="_blank"
-							rel="noopener noreferrer"
-							className={style.forgotPassword}
-						>
-							Forgot password?
-						</a>
-					</div>
-				</div>
-				<div className={style.wrapper}>
+					}
+				>
+					<form className={style.form} onSubmit={handleSubmit} autoComplete="off">
+						<Input
+							type="email"
+							label="Phone number, username, or email"
+							value={userName}
+							onChange={(e) => setUserName(e.target.value)}
+						/>
+						<InputPassword
+							label="Password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+						<SubmitBtn type="submit">Log in</SubmitBtn>
+					</form>
+					<OrDivider />
+					<button className={style.logFace}>Log in with Facebook</button>
+					<Link to="/password/reset" className={style.forgotPassword}>
+						Forgot password?
+					</Link>
+				</FormContainer>
+				<FormContainer>
 					<h3 className={style.SignUp}>
-						Don't have an account?{' '}
-						<a href="#" target="_blank" rel="noopener noreferrer">
-							Sign up
-						</a>
+						Don't have an account? <Link to="/accounts/emailsignup">Sign up</Link>
 					</h3>
-                </div>
+				</FormContainer>
 			</div>
 		</section>
 	);
