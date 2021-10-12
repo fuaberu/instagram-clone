@@ -1,0 +1,11 @@
+.logInBtn {
+	width: 100%;
+	margin: 6px auto;
+	font-weight: 700;
+	border: none;
+	outline: none;
+	padding: 7px;
+	background-color: var(--blue);
+	color: var(--white);
+	border-radius: var(--borderRadius);
+}

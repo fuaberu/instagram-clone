@@ -1,8 +1,11 @@
 .container {
+	max-width: 260px;
 	position: relative;
-	margin: 6px auto;
+	margin-bottom: 6px;
+	cursor: text;
 }
 .input {
+	cursor: text;
 	padding: 9.5px;
 	overflow: hidden;
 	background-color: var(--body);
@@ -12,10 +15,11 @@
 	border-radius: var(--borderRadius);
 }
 .label {
+	cursor: text;
 	position: absolute;
 	color: var(--darkerBody);
 	font-size: 0.75rem;
 	top: 11px;
 	bottom: 0;
-	left: 8px;
+	left: 10px;
 }

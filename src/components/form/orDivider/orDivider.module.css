@@ -1,0 +1,15 @@
+.orContainer {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	color: var(--darkerBody);
+	font-size: 0.75rem;
+	font-weight: 700;
+	margin: 0.875rem auto;
+}
+.line {
+	width: 40%;
+	height: 1px;
+	background-color: var(--darkBody);
+}
