@@ -1,0 +1,18 @@
+.container {
+	width: 100%;
+}
+.logo a {
+	height: fit-content;
+}
+.logo path {
+	height: 3.375rem;
+}
+.navBar {
+	height: 3.375rem;
+	display: flex;
+	align-items: center;
+	margin-right: auto;
+}
+.navBar li:first-child {
+	margin-right: auto;
+}
