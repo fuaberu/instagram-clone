@@ -119,7 +119,7 @@ const Homepage = () => {
 				>
 					<form className={style.form} onSubmit={handleSubmit} autoComplete="off">
 						<Input
-							type="email"
+							type="text"
 							label="Phone number, username, or email"
 							value={userName}
 							onChange={(e) => setUserName(e.target.value)}

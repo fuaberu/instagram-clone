@@ -50,3 +50,8 @@
 .SignUp a:visited {
 	color: var(--blue);
 }
+@media screen and (max-width: 860px) {
+	.left {
+		display: none;
+	}
+}

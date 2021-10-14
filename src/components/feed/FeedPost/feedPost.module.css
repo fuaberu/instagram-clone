@@ -1,0 +1,56 @@
+.post {
+	font-size: 0.875rem;
+	font-weight: 300;
+}
+.post a {
+	font-size: 0.875rem;
+}
+.postHeader {
+	padding: 14px;
+	display: flex;
+	align-items: center;
+}
+.postHeader img {
+	object-fit: cover;
+	display: flex;
+	height: 32px;
+	width: 32px;
+	border-radius: 50%;
+}
+.postHeader div {
+	margin-left: 14px;
+}
+.postHeader div h4 {
+	font-size: 12px;
+}
+.picture {
+	width: 100%;
+}
+.liked {
+	padding: 10px 0;
+}
+.description {
+	padding: 10px 16px 16px 16px;
+}
+.time {
+	font-size: 12px;
+	color: var(--darkerBody);
+	text-transform: uppercase;
+}
+.comment {
+	border-top: 1px solid var(--darkBody);
+	padding: 4px 16px;
+	height: 53px;
+	display: flex;
+}
+.comment input {
+	width: 100%;
+	height: 100%;
+	border: none;
+	outline: none;
+}
+.comment button {
+	background: none;
+	border: none;
+	color: var(--blue);
+}

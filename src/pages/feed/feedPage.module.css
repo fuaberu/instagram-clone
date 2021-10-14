@@ -1,0 +1,13 @@
+.stories {
+	display: flex;
+	padding: 16px;
+}
+.storiesContainer,
+.feedPosts {
+	background-color: var(--white);
+	border-radius: var(--borderRadius);
+	border: 1px solid var(--darkBody);
+	margin: 30px auto 24px auto;
+	max-width: 600px;
+	overflow: hidden;
+}

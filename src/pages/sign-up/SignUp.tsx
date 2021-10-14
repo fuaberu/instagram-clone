@@ -27,18 +27,19 @@ const SignUp = () => {
 		e.preventDefault();
 		try {
 			const { user } = await createUserWithEmailAndPassword(auth, email, password);
-			const userData: usersAuth = {
+			const userData = {
 				uid: user.uid,
 				userName: userName,
 				displayName: fullName,
 				email: email,
 				following: [],
 				followers: [],
+				profilePicture: '',
 				createdDate: Date.now(),
 			};
-
 			await handleUserProfile(userData);
 			resetForm();
+			// window.location.assign('/feed');
 		} catch (error) {
 			console.log(error);
 		}
