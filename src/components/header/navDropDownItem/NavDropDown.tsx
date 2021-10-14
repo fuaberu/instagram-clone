@@ -2,18 +2,25 @@ import React, { SVGProps, useState } from 'react';
 import style from '../navItem.module.css';
 
 interface props {
-	icon: SVGProps<SVGElement>;
+	iconActive: SVGProps<SVGElement>;
+	iconNot: SVGProps<SVGElement>;
 	children: React.ReactNode;
+	width: number;
+	height?: number;
 }
 
-const NavDropDown = ({ icon, children }: props) => {
+const NavDropDown = ({ iconActive, iconNot, children, width, height }: props) => {
 	const [open, setOpen] = useState(false);
 
 	return (
 		<li className={style.container} onClick={() => setOpen(!open)}>
-			{icon}
+			{open ? iconActive : iconNot}
 
-			{open && <div className={style.dropOpen}>{children}</div>}
+			{open && (
+				<div className={style.openMenu} style={{ width: `${width}px` }}>
+					{children}
+				</div>
+			)}
 		</li>
 	);
 };

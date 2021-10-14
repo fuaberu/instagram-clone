@@ -1,16 +1,22 @@
 import React, { SVGProps } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import style from '../navItem.module.css';
 
 interface props {
 	to: string;
-	icon: SVGProps<SVGElement>;
+	iconActive?: SVGProps<SVGElement>;
+	iconNot?: SVGProps<SVGElement>;
+	icon?: SVGProps<SVGElement>;
 }
 
-const NavLinkItem = ({ to, icon }: props) => {
+const NavLinkItem = ({ to, iconActive, iconNot, icon }: props) => {
+	const location = useLocation();
 	return (
 		<li className={style.container}>
-			<Link to={to}>{icon}</Link>
+			<NavLink to={to} activeClassName={style.selected}>
+				{icon}
+				{location.pathname === to ? iconActive : iconNot}
+			</NavLink>
 		</li>
 	);
 };

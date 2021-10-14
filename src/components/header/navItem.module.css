@@ -9,3 +9,17 @@
 .container:not(:first-child) {
 	padding-left: 1.375rem;
 }
+.openMenu {
+	position: absolute;
+	top: var(--headerHeight);
+	right: 10px;
+	background-color: var(--white);
+	border: 1px solid var(--darkBody);
+	border-radius: var(--borderRadius);
+}
+.openMenu div {
+	padding: 0.5rem 1rem;
+}
+.openMenu div svg {
+	margin-right: 0.75rem;
+}
