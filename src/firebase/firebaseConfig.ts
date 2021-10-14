@@ -1,11 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, addDoc, collection } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import {
 	getAuth,
 	createUserWithEmailAndPassword,
 	sendEmailVerification,
+	signOut,
 } from 'firebase/auth';
+import noProfile from '../images/no-user.jpg';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -38,12 +40,13 @@ export const signUpUser = (email: string, password: string) => {
 // users profiles
 export interface usersAuth {
 	uid: string;
-	userName: string;
-	displayName: string;
-	email: string;
-	following: number[];
-	followers: number[];
-	createdDate: number;
+	userName?: string | null;
+	displayName: string | null;
+	email: string | null;
+	following?: number[];
+	followers?: number[];
+	profilePicture?: string;
+	createdDate?: number;
 }
 
 export const handleUserProfile = async (usersAuth: usersAuth) => {
@@ -52,29 +55,35 @@ export const handleUserProfile = async (usersAuth: usersAuth) => {
 	const docSnap = await getDoc(userRef);
 
 	if (!docSnap.exists()) {
+		const time = new Date().getTime();
 		// if user do not exist
 		try {
-			const docRef = await addDoc(collection(db, 'users'), {
+			await setDoc(doc(db, 'users', usersAuth.uid), {
 				userName: usersAuth.userName,
 				name: usersAuth.displayName,
 				email: usersAuth.email,
 				following: [],
 				followers: [],
-				createdDate: Date.now(),
+				profilePicture: noProfile,
+				createdDate: time,
 			});
-			//send the verification email
+			// send the verification email
 			if (auth.currentUser) {
 				sendEmailVerification(auth.currentUser).then(() => {
 					// Email verification sent!
-					// ...
 					alert(`an email was sent to the email: ${usersAuth.email}`);
 				});
 			}
-
-			console.log('Document written with ID: ', docRef.id);
 		} catch (e) {
 			console.error('Error adding document: ', e);
 		}
 	}
-	return userRef;
+	return docSnap.data();
+};
+
+export const handleSignOut = () => {
+	signOut(auth).then(() => {
+		alert('sign-Out successful');
+		window.location.href = '/';
+	});
 };
