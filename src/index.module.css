@@ -8,6 +8,7 @@
 	--darkBody: rgb(219, 219, 219);
 	--darkerBody: rgb(142, 142, 142);
 	--blue: rgb(0, 149, 246);
+	--black: #262626;
 
 	--borderRadius: 4px;
 	--headerHeight: 54px;
@@ -16,11 +17,16 @@
 body {
 	background-color: var(--body);
 	font-size: 16px;
+	color: var(--black);
 	font-family: 'Roboto', sans-serif;
 }
 a,
 li {
 	text-decoration: none;
+	color: var(--black);
+}
+a:visited {
+	color: var(--black);
 }
 li {
 	list-style: none;
@@ -34,4 +40,5 @@ a {
 button {
 	border: none;
 	outline: none;
+	background: none;
 }
