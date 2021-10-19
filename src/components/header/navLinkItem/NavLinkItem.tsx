@@ -13,7 +13,7 @@ const NavLinkItem = ({ to, iconActive, iconNot, icon }: props) => {
 	const location = useLocation();
 	return (
 		<li className={style.container}>
-			<NavLink to={to} activeClassName={style.selected}>
+			<NavLink exact to={to} activeClassName={style.selected}>
 				{icon}
 				{location.pathname === to ? iconActive : iconNot}
 			</NavLink>

@@ -46,7 +46,7 @@ const Homepage = () => {
 			const user = await signInWithEmailAndPassword(auth, userName, password);
 			console.log(user);
 			resetForm();
-			history.push('/feed');
+			history.push(`/feed/${user.user.uid}`);
 		} catch (error) {
 			console.log(error);
 		}
