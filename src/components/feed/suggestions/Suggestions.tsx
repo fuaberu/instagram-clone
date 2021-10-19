@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import style from './suggestions.module.css';
-import { query, orderBy, limit, collection, getDocs } from 'firebase/firestore';
-import { db, handleSignOut } from '../../../firebase/firebaseConfig';
+import { query, orderBy, collection, getDocs } from 'firebase/firestore';
+import { db, handleFollow, handleSignOut } from '../../../firebase/firebaseConfig';
 import { userInfo } from '../../../App';
 
 const Suggestions = () => {
@@ -11,19 +11,28 @@ const Suggestions = () => {
 	async function getSuggestions() {
 		setSuggstions([]);
 		const usersRef = collection(db, 'users');
-		const q = query(usersRef, orderBy('createdDate', 'asc'), limit(5));
+		const q = query(usersRef, orderBy('createdDate', 'asc'));
 
 		const querySnapshot = await getDocs(q);
 		querySnapshot.forEach((doc) => {
 			// doc.data() is never undefined for query doc snapshots
-			setSuggstions((suggestions) => [...suggestions, doc.data()]);
+			if (
+				doc.data().uid !== currentUser.uid &&
+				!currentUser.following.includes(doc.data().uid) &&
+				suggestions.length < 6
+			) {
+				setSuggstions((suggestions) => [...suggestions, doc.data()]);
+			}
 		});
 	}
 	useEffect(() => {
 		getSuggestions();
 	}, [currentUser]);
 
-	console.log(suggestions, 'query stapshot');
+	const handleFollowing = (followUid: string) => {
+		setSuggstions(suggestions.filter((el: any) => el.uid !== followUid));
+	};
+
 	return (
 		<div>
 			<div className={style.current}>
@@ -40,7 +49,7 @@ const Suggestions = () => {
 			</div>
 			<h3 className={style.divider}>Suggestions For You</h3>
 			{suggestions.length > 0
-				? suggestions.map(({ profilePicture, userName }: any, index) => {
+				? suggestions.map(({ profilePicture, userName, uid }: any, index) => {
 						return (
 							<div key={index} className={style.flex}>
 								<img
@@ -49,7 +58,14 @@ const Suggestions = () => {
 									alt={`${userName} profile`}
 								/>
 								<h4>{userName}</h4>
-								<button>Follow</button>
+								<button
+									onClick={() => {
+										handleFollow(currentUser.uid, uid);
+										handleFollowing(uid);
+									}}
+								>
+									Follow
+								</button>
 							</div>
 						);
 				  })
