@@ -9,18 +9,27 @@ import Inbox from './pages/inbox/Inbox';
 import { auth, handleUserProfile } from './firebase/firebaseConfig';
 import { onAuthStateChanged } from '@firebase/auth';
 
-export const userInfo = React.createContext({});
-
-interface UserState {
-	uid?: string;
-	userName?: string | null;
-	displayName?: string | null;
-	email?: string | null;
-	following?: number[];
-	followers?: number[];
-	profilePicture?: string;
-	createdDate?: number;
+export interface UserState {
+	uid: string;
+	userName: string;
+	displayName: string;
+	email: string;
+	following: string[];
+	followers: string[];
+	profilePicture: string;
+	createdDate: number;
 }
+
+export const userInfo = React.createContext<UserState>({
+	uid: '',
+	userName: '',
+	displayName: '',
+	email: '',
+	following: [],
+	followers: [],
+	profilePicture: '',
+	createdDate: 0,
+});
 
 function App() {
 	const [userData, setUserData] = useState<UserState>({
@@ -39,12 +48,18 @@ function App() {
 			if (user) {
 				const currentUserData = await handleUserProfile(user);
 				if (currentUserData) {
-					setUserData(currentUserData);
+					setUserData({
+						uid: currentUserData.uid,
+						userName: currentUserData.userName,
+						displayName: currentUserData.displayName,
+						email: currentUserData.email,
+						following: currentUserData.following,
+						followers: currentUserData.followers,
+						profilePicture: currentUserData.profilePicture,
+						createdDate: currentUserData.createdDate,
+					});
 				}
 				console.log(currentUserData);
-			} else {
-				// User is signed out
-				// ...
 			}
 		});
 	}, []);
@@ -55,7 +70,7 @@ function App() {
 					<Route exact path="/" render={() => <Homepage />} />
 					<Route path="/accounts/emailsignup" render={() => <SignUp />} />
 					<Route
-						path="/feed"
+						path="/feed/:userId"
 						render={() => (
 							<Layout>
 								<Feed />
@@ -63,7 +78,7 @@ function App() {
 						)}
 					/>
 					<Route
-						path="/explore"
+						path="/explore/:userId"
 						render={() => (
 							<Layout>
 								<Explore />
@@ -71,7 +86,7 @@ function App() {
 						)}
 					/>
 					<Route
-						path="/direct/inbox"
+						path="/direct/inbox/:userId"
 						render={() => (
 							<Layout>
 								<Inbox />
