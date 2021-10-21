@@ -1,3 +1,19 @@
+.feedMain {
+	padding-top: var(--headerHeight);
+}
+.newStories {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-right: 14px;
+	font-size: 12px;
+}
+.newStories img {
+	border-radius: 50%;
+	width: 56px;
+	height: 56px;
+	margin: 4px;
+}
 .stories {
 	display: flex;
 	padding: 16px;
