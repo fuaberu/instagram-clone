@@ -1,6 +1,10 @@
 .post {
 	font-size: 0.875rem;
 	font-weight: 300;
+	margin-bottom: 30px;
+	background-color: var(--white);
+	border: 1px solid var(--darkBody);
+	background-color: var(--white);
 }
 .post a {
 	font-size: 0.875rem;
@@ -26,11 +30,34 @@
 .picture {
 	width: 100%;
 }
+.buttons:not(:first-child) {
+	padding: 8px;
+}
 .liked {
 	padding: 10px 0;
 }
 .description {
 	padding: 10px 16px 16px 16px;
+}
+.userDescription {
+	display: flex;
+	font-weight: 300;
+}
+.userDescription a {
+	font-weight: 600;
+}
+.userName a {
+	font-weight: 600;
+}
+.commentShow {
+	padding-bottom: 6px;
+}
+.moreComments {
+	padding: 8px 0;
+}
+.moreComments a,
+.moreComments a:visited {
+	color: var(--darkerBody);
 }
 .time {
 	font-size: 12px;

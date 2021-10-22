@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import style from './header.module.css';
 import NavLinkItem from './navLinkItem/NavLinkItem';
 import NavDropDown from './navDropDownItem/NavDropDown';
@@ -6,13 +6,88 @@ import logo from '../../images/instagram-logo.png';
 import noUser from '../../images/no-user.jpg';
 import { userInfo } from '../../App';
 import { Link } from 'react-router-dom';
-import { handleSignOut } from '../../firebase/firebaseConfig';
+import { db, handleSignOut, storage } from '../../firebase/firebaseConfig';
+import Input from '../form/Input';
+import SubmitBtn from '../form/SubmitBtn/SubmitBtn';
+import { ref, uploadBytes, getDownloadURL } from '@firebase/storage';
+import { collection, addDoc, updateDoc } from '@firebase/firestore';
 
 const Header = () => {
+	const [uploadOpen, setUploadOpen] = useState(false);
+	const [description, setDescription] = useState('');
+	const [place, setPlace] = useState('');
+	const [mediaUrl, setMediaUrl] = useState('');
+
 	const userData = useContext(userInfo);
+
+	// set firestore post
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		uploadFirestore();
+		resetForm();
+	};
+
+	const uploadFirestore = async () => {
+		const newPostRef = await addDoc(collection(db, 'posts'), {
+			liked: [],
+			comments: [],
+			postTime: new Date().getTime(),
+			userUid: userData.uid,
+			mediaUrl: mediaUrl,
+			description: description,
+			place: place,
+		});
+		const id = newPostRef.id;
+		await updateDoc(newPostRef, {
+			id: id,
+		});
+	};
+
+	// upload a post media
+	const uploadPostMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const target = e.target;
+		const file = (target.files as FileList)[0];
+		const fileRef = ref(storage, `posts/${file.name}`);
+		await uploadBytes(fileRef, file);
+		const fileUrl = await getDownloadURL(fileRef);
+		setMediaUrl(fileUrl);
+	};
+
+	const resetForm = () => {
+		setUploadOpen(!uploadOpen);
+		setMediaUrl('');
+		setDescription('');
+		setPlace('');
+	};
 
 	return (
 		<div className={style.container}>
+			{uploadOpen && (
+				<div className={style.uploadContainer}>
+					<form action="" onSubmit={(e) => handleSubmit(e)}>
+						<input
+							type="file"
+							id="fileInput"
+							accept="image/*"
+							onChange={(e) => uploadPostMedia(e)}
+							required
+						/>
+						<Input
+							type="text"
+							label="Post description"
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+						/>
+						<Input
+							type="text"
+							label="Post location"
+							value={place}
+							onChange={(e) => setPlace(e.target.value)}
+						/>
+						<SubmitBtn type="submit">Log in</SubmitBtn>
+					</form>
+				</div>
+			)}
 			<nav>
 				<ul className={style.navBar}>
 					<NavLinkItem
@@ -49,7 +124,7 @@ const Header = () => {
 										<path d="M45.3 48H30c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2-4.6-4.6-4.6s-4.6 2-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.5-.6 2.1 0l21.5 21.5c.4.4.6 1.1.3 1.6 0 .1-.1.1-.1.2v22.8c.1.8-.6 1.5-1.4 1.5zm-13.8-3h12.3V23.4L24 3.6l-20 20V45h12.3V34.2c0-4.3 3.3-7.6 7.6-7.6s7.6 3.3 7.6 7.6V45z"></path>
 									</svg>
 								}
-								to={`/feed/inbox/${userData.uid}`}
+								to={`/feed/${userData.uid}`}
 							/>
 							<NavLinkItem
 								iconActive={
@@ -106,9 +181,7 @@ const Header = () => {
 								to={`/explore/${userData.uid}`}
 							/>
 
-							<li className={style.upload}>
-								<label htmlFor="fileInput"></label>
-								<input type="file" id="fileInput" accept="image/*" />
+							<li className={style.upload} onClick={() => setUploadOpen(!uploadOpen)}>
 								<svg
 									color="#262626"
 									fill="#262626"
@@ -122,7 +195,6 @@ const Header = () => {
 									<path d="M24 37.8c-.8 0-1.5-.7-1.5-1.5V11.7c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v24.6c0 .8-.7 1.5-1.5 1.5z"></path>
 								</svg>
 							</li>
-
 							<NavDropDown
 								width={500}
 								iconNot={

@@ -1,12 +1,21 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+	getFirestore,
+	doc,
+	getDoc,
+	setDoc,
+	updateDoc,
+	arrayUnion,
+	arrayRemove,
+} from 'firebase/firestore';
 import {
 	getAuth,
 	createUserWithEmailAndPassword,
 	sendEmailVerification,
 	signOut,
 } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 import noProfile from '../images/no-user.jpg';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -26,6 +35,7 @@ const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 export const auth = getAuth();
+export const storage = getStorage(app);
 
 // sign up
 export const signUpUser = (email: string, password: string) => {
@@ -59,11 +69,14 @@ export const handleUserProfile = async (usersAuth: usersAuth) => {
 		// if user do not exist
 		try {
 			await setDoc(doc(db, 'users', usersAuth.uid), {
+				uid: usersAuth.uid,
 				userName: usersAuth.userName,
 				name: usersAuth.displayName,
 				email: usersAuth.email,
 				following: [],
 				followers: [],
+				posts: [],
+				stories: [],
 				profilePicture: noProfile,
 				createdDate: time,
 			});
@@ -86,4 +99,60 @@ export const handleSignOut = () => {
 		alert('sign-Out successful');
 		window.location.href = '/';
 	});
+};
+
+//follow user
+export const handleFollow = async (currentUser: string, toFollow: string) => {
+	const usersRef = doc(db, 'users', currentUser);
+
+	console.log(currentUser, toFollow);
+	await updateDoc(usersRef, {
+		following: arrayUnion(toFollow),
+	});
+};
+
+//unfollow user
+export const handleUnfollow = async (currentUser: string, toUnfollow: string) => {
+	const usersRef = doc(db, 'users', currentUser);
+
+	await updateDoc(usersRef, {
+		following: arrayRemove(toUnfollow),
+	});
+};
+
+// update comments and like
+export const updateLiked = async (post: string, currentUser: string) => {
+	if (!post || !currentUser) return;
+	const postRef = doc(db, 'posts', post);
+	const docSnap = await getDoc(postRef);
+	if (!docSnap.exists()) return;
+	if (docSnap.data().liked.indexOf(currentUser) >= 0) {
+		await updateDoc(postRef, {
+			liked: arrayRemove(currentUser),
+		});
+	} else {
+		await updateDoc(postRef, {
+			liked: arrayUnion(currentUser),
+		});
+	}
+
+	const updatedDocSnap = await getDoc(postRef);
+	if (!updatedDocSnap.exists()) return;
+	return updatedDocSnap.data().liked;
+};
+
+// comments
+export const updateComments = async (post: string, comment?: object) => {
+	if (!post) return;
+	const postRef = doc(db, 'posts', post);
+	const docSnap = await getDoc(postRef);
+	if (docSnap.exists() && !comment) return docSnap.data().comments;
+	console.log(comment);
+	await updateDoc(postRef, {
+		comments: arrayUnion(comment),
+	});
+	const updatedDocSnap = await getDoc(postRef);
+	console.log(updatedDocSnap.data());
+	if (!updatedDocSnap.exists()) return;
+	return updatedDocSnap.data().comments;
 };

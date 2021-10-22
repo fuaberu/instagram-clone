@@ -23,6 +23,7 @@ const Input: FC<inputProps> = (props) => {
 				style={props.value ? inputFocus : {}}
 				onChange={props.onChange}
 				autoComplete="new-password"
+				required
 			/>
 			<label
 				className={styles.label}
