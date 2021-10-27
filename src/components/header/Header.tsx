@@ -10,7 +10,7 @@ import { db, handleSignOut, storage } from '../../firebase/firebaseConfig';
 import Input from '../form/Input';
 import SubmitBtn from '../form/SubmitBtn/SubmitBtn';
 import { ref, uploadBytes, getDownloadURL } from '@firebase/storage';
-import { collection, addDoc, updateDoc } from '@firebase/firestore';
+import { collection, addDoc, updateDoc, doc, arrayUnion } from '@firebase/firestore';
 
 const Header = () => {
 	const [uploadOpen, setUploadOpen] = useState(false);
@@ -22,7 +22,6 @@ const Header = () => {
 
 	// set firestore post
 	const handleSubmit = (e: FormEvent) => {
-		e.preventDefault();
 		uploadFirestore();
 		resetForm();
 	};
@@ -40,6 +39,12 @@ const Header = () => {
 		const id = newPostRef.id;
 		await updateDoc(newPostRef, {
 			id: id,
+		});
+		//add the post to the current user db
+		const userRef = doc(db, 'users', userData.uid);
+
+		await updateDoc(userRef, {
+			posts: arrayUnion(id),
 		});
 	};
 
@@ -222,8 +227,7 @@ const Header = () => {
 									</svg>
 								}
 							>
-								<h1>adxnaoi</h1>
-								<p>asxa</p>
+								<p>work in progress</p>
 							</NavDropDown>
 							<NavDropDown
 								width={230}
@@ -251,7 +255,7 @@ const Header = () => {
 								}
 							>
 								<div>
-									<Link to="/profile">
+									<Link to={`/profile/${userData.uid}`}>
 										<svg
 											color="#262626"
 											fill="#262626"
@@ -264,7 +268,7 @@ const Header = () => {
 										<span>Profile</span>
 									</Link>
 								</div>
-								<div>
+								<div className={style.logOut}>
 									<button onClick={handleSignOut}>Log Out</button>
 								</div>
 							</NavDropDown>
