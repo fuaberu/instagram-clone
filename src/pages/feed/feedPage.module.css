@@ -48,6 +48,26 @@
 .suggestions {
 	display: none;
 }
+.popupScreen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+}
+.popupForm {
+	width: 90vw;
+	max-width: 400px;
+	min-height: 30vh;
+	background-color: var(--white);
+	border-radius: 12px;
+	padding: 25px;
+	margin: 30vh auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
 @media screen and (min-width: 985px) {
 	.feedMain {
 		display: flex;

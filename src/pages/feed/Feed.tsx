@@ -4,8 +4,19 @@ import StoriesBtn from '../../components/feed/storiesBtn/StoriesBtn';
 import FeedPost from '../../components/feed/FeedPost/FeedPost';
 import Suggestions from '../../components/feed/suggestions/Suggestions';
 import { userInfo } from '../../App';
-import { collection, query, getDocs, where } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
+import {
+	collection,
+	query,
+	getDocs,
+	where,
+	addDoc,
+	doc,
+	updateDoc,
+	arrayUnion,
+} from 'firebase/firestore';
+import { db, storage } from '../../firebase/firebaseConfig';
+import SubmitBtn from '../../components/form/SubmitBtn/SubmitBtn';
+import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
 
 export interface Post {
 	mediaUrl: string;
@@ -23,6 +34,8 @@ export interface Post {
 const Feed = () => {
 	const [posts, setPosts] = useState<Array<Post>>([]);
 	const [loading, setLoading] = useState(true);
+	const [uploadOpen, setUploadOpen] = useState(false);
+	const [storieFile, setStorieFile] = useState<File>();
 
 	const currentUser = useContext(userInfo);
 
@@ -46,8 +59,58 @@ const Feed = () => {
 		// eslint-disable-next-line
 	}, [currentUser]);
 
+	//upload stories
+	const uploadStoriesMedia = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const target = e.target;
+		const file = (target.files as FileList)[0];
+		setStorieFile(file);
+	};
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (!storieFile) return;
+		const fileRef = ref(storage, `stories/${storieFile.name}`);
+		await uploadBytes(fileRef, storieFile);
+		const fileUrl = await getDownloadURL(fileRef);
+
+		const newPostRef = await addDoc(collection(db, 'stories'), {
+			liked: [],
+			comments: [],
+			postTime: new Date().getTime(),
+			userUid: currentUser.uid,
+			mediaUrl: fileUrl,
+		});
+		const id = newPostRef.id;
+		await updateDoc(newPostRef, {
+			id: id,
+		});
+		//add the post to the current user db
+		const userRef = doc(db, 'users', currentUser.uid);
+
+		await updateDoc(userRef, {
+			stories: arrayUnion(id),
+		});
+	};
+
 	return (
 		<main className={style.feedMain}>
+			{uploadOpen && (
+				<div className={style.popupScreen}>
+					<form className={style.popupForm} onSubmit={(e) => handleSubmit(e)}>
+						<input
+							type="file"
+							id="fileInput"
+							accept="image/*"
+							onChange={(e) => uploadStoriesMedia(e)}
+							required
+						/>
+						<SubmitBtn type="submit">Log in</SubmitBtn>
+						<button type="button" onClick={() => setUploadOpen(!uploadOpen)}>
+							Cancel
+						</button>
+					</form>
+				</div>
+			)}
 			{loading && (
 				<div className={style.loader}>
 					<svg
@@ -70,12 +133,12 @@ const Feed = () => {
 				<div className={style.storiesContainer}>
 					<ul className={style.stories}>
 						<li className={style.newStories}>
-							<div>
+							<button onClick={() => setUploadOpen(!uploadOpen)}>
 								<img
 									src={currentUser.profilePicture}
-									alt={`${currentUser.displayName} profile`}
+									alt={`${currentUser.name} profile`}
 								/>
-							</div>
+							</button>
 							<p>Your Storie</p>
 						</li>
 						<StoriesBtn
