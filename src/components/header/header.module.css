@@ -4,6 +4,57 @@
 	background-color: var(--white);
 	border-bottom: 1px solid var(--darkBody);
 }
+.search {
+	max-width: 260px;
+	position: relative;
+	margin-bottom: 6px;
+	cursor: text;
+}
+.input {
+	cursor: text;
+	padding: 9.5px;
+	overflow: hidden;
+	background-color: var(--body);
+	width: 100%;
+	outline: none;
+	border: 1px solid var(--darkBody);
+	border-radius: var(--borderRadius);
+}
+.label {
+	cursor: text;
+	position: absolute;
+	color: var(--darkerBody);
+	font-size: 0.75rem;
+	top: 8px;
+	left: 0;
+}
+.popupScreen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+}
+.popupForm {
+	width: 90vw;
+	max-width: 400px;
+	min-height: 30vh;
+	background-color: var(--white);
+	border-radius: 12px;
+	padding: 25px;
+	margin: 30vh auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+.popupForm div {
+	max-width: 100%;
+}
+.popupForm button:last-child {
+	border-top: 1px solid var(--darkBody);
+	padding: 10px;
+}
 .upload {
 	position: relative;
 	display: flex;
