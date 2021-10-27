@@ -96,18 +96,17 @@ const FeedPost = (props: Post) => {
 		getUserInfo();
 		handleLike();
 		inicialComment();
-		// eslint-disable-next-line
-	}, [props]);
+	}, []);
 
 	return (
 		<div className={style.post}>
 			<div className={style.postHeader}>
-				<Link to={`/${props.userUid}`}>
+				<Link to={`/profile/${props.userUid}`}>
 					<img src={profile} alt={`${userName} profile`} />
 				</Link>
 				<div>
 					<h3>
-						<Link to={`/${props.userUid}`}>{userName}</Link>
+						<Link to={`/profile/${props.userUid}`}>{userName}</Link>
 					</h3>
 					<h4>{props.place}</h4>
 				</div>
@@ -152,11 +151,7 @@ const FeedPost = (props: Post) => {
 						viewBox="0 0 48 48"
 						width="24"
 					>
-						<path
-							clip-rule="evenodd"
-							d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z"
-							fill-rule="evenodd"
-						></path>
+						<path d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z"></path>
 					</svg>
 				</Link>
 
@@ -171,7 +166,7 @@ const FeedPost = (props: Post) => {
 				)}
 				<div className={style.userDescription}>
 					<p>
-						<Link to={`/${props.userUid}`}>{userName}</Link> {props.description}
+						<Link to={`/profile/${props.userUid}`}>{userName}</Link> {props.description}
 					</p>
 				</div>
 				{commentsArray.length > 2 ? (
@@ -185,7 +180,7 @@ const FeedPost = (props: Post) => {
 					commentsArray.slice(0, 2).map((comment, index) => (
 						<p key={index} className={style.commentShow}>
 							<span className={style.userName}>
-								<Link to={`/${comment.userUid}`}>{comment.userName}</Link>
+								<Link to={`/profile/${comment.userUid}`}>{comment.userName}</Link>
 							</span>{' '}
 							{comment.value}
 						</p>
