@@ -39,7 +39,7 @@ const SignUp = () => {
 			};
 			await handleUserProfile(userData);
 			resetForm();
-			// window.location.assign('/feed');
+			window.location.assign(`/feed/${user.uid}`);
 		} catch (error) {
 			console.log(error);
 		}

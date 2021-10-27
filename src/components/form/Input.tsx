@@ -18,7 +18,7 @@ const Input: FC<inputProps> = (props) => {
 			<input
 				type={props.type}
 				className={styles.input}
-				id={props.type}
+				id={props.label}
 				value={props.value}
 				style={props.value ? inputFocus : {}}
 				onChange={props.onChange}

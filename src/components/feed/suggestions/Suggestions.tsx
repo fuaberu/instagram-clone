@@ -28,6 +28,7 @@ const Suggestions = () => {
 	}
 	useEffect(() => {
 		getSuggestions();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentUser]);
 
 	const handleFollowing = (followUid: string) => {
@@ -48,7 +49,7 @@ const Suggestions = () => {
 					<Link to={`/profile/${currentUser.uid}`}>
 						<h4>{currentUser.userName}</h4>
 					</Link>
-					<h5>{currentUser.displayName}</h5>
+					<h5>{currentUser.name}</h5>
 				</div>
 				<button onClick={handleSignOut}>Log Out</button>
 			</div>

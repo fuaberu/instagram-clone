@@ -157,7 +157,7 @@ const Profile = () => {
 					<section className={style.profileSection}>
 						<h2>{pageUser.userName}</h2>
 						{currentUser.uid === profileId ? (
-							<Link to="/settings">Edit Profile</Link>
+							<Link to={`/accounts/edit/${pageUser.uid}`}>Edit Profile</Link>
 						) : (
 							<button onClick={() => followBtn()}>
 								{followState ? 'Unfollow' : 'Follow'}
@@ -167,7 +167,7 @@ const Profile = () => {
 						{pageUser.followers && <span>{`${pageUser.posts.length} posts`}</span>}
 						<span>{`${pageUser.followers.length} followers`}</span>
 						<span>{`${pageUser.following.length} following`}</span>
-						<h3>{pageUser.displayName}</h3>
+						<h3>{pageUser.name}</h3>
 					</section>
 				</header>
 			)}
