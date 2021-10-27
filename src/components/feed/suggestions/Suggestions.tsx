@@ -3,6 +3,7 @@ import style from './suggestions.module.css';
 import { query, orderBy, collection, getDocs } from 'firebase/firestore';
 import { db, handleFollow, handleSignOut } from '../../../firebase/firebaseConfig';
 import { userInfo } from '../../../App';
+import { Link } from 'react-router-dom';
 
 const Suggestions = () => {
 	const currentUser = useContext(userInfo);
@@ -36,13 +37,17 @@ const Suggestions = () => {
 	return (
 		<div>
 			<div className={style.current}>
-				<img
-					className={style.profileImage}
-					src={currentUser.profilePicture}
-					alt="user profile"
-				/>
+				<Link to={`/profile/${currentUser.uid}`}>
+					<img
+						className={style.profileImage}
+						src={currentUser.profilePicture}
+						alt="user profile"
+					/>
+				</Link>
 				<div>
-					<h4>{currentUser.userName}</h4>
+					<Link to={`/profile/${currentUser.uid}`}>
+						<h4>{currentUser.userName}</h4>
+					</Link>
 					<h5>{currentUser.displayName}</h5>
 				</div>
 				<button onClick={handleSignOut}>Log Out</button>
@@ -52,12 +57,16 @@ const Suggestions = () => {
 				? suggestions.map(({ profilePicture, userName, uid }: any, index) => {
 						return (
 							<div key={index} className={style.flex}>
-								<img
-									className={style.suggestionImage}
-									src={profilePicture}
-									alt={`${userName} profile`}
-								/>
-								<h4>{userName}</h4>
+								<Link to={`/profile/${uid}`}>
+									<img
+										className={style.suggestionImage}
+										src={profilePicture}
+										alt={`${userName} profile`}
+									/>
+								</Link>
+								<Link to={`/profile/${uid}`}>
+									<h4>{userName}</h4>
+								</Link>
 								<button
 									onClick={() => {
 										handleFollow(currentUser.uid, uid);
