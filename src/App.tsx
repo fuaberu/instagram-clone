@@ -9,11 +9,12 @@ import Inbox from './pages/inbox/Inbox';
 import { auth, handleUserProfile } from './firebase/firebaseConfig';
 import { onAuthStateChanged } from '@firebase/auth';
 import Profile from './pages/profile/Profile';
+import Settings from './pages/settings/Settings';
 
 export interface UserState {
 	uid: string;
 	userName: string;
-	displayName: string;
+	name: string;
 	email: string;
 	following: string[];
 	followers: string[];
@@ -24,7 +25,7 @@ export interface UserState {
 export const userInfo = React.createContext<UserState>({
 	uid: '',
 	userName: '',
-	displayName: '',
+	name: '',
 	email: '',
 	following: [],
 	followers: [],
@@ -36,7 +37,7 @@ function App() {
 	const [userData, setUserData] = useState<UserState>({
 		uid: '',
 		userName: '',
-		displayName: '',
+		name: '',
 		email: '',
 		following: [],
 		followers: [],
@@ -52,7 +53,7 @@ function App() {
 					setUserData({
 						uid: currentUserData.uid,
 						userName: currentUserData.userName,
-						displayName: currentUserData.displayName,
+						name: currentUserData.name,
 						email: currentUserData.email,
 						following: currentUserData.following,
 						followers: currentUserData.followers,
@@ -99,6 +100,14 @@ function App() {
 						render={() => (
 							<Layout>
 								<Profile />
+							</Layout>
+						)}
+					/>
+					<Route
+						path="/accounts/edit/:userId"
+						render={() => (
+							<Layout>
+								<Settings />
 							</Layout>
 						)}
 					/>

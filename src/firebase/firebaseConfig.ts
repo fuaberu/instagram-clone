@@ -104,7 +104,6 @@ export const getUserData = async (user: string) => {
 
 export const handleSignOut = () => {
 	signOut(auth).then(() => {
-		alert('sign-Out successful');
 		window.location.href = '/';
 	});
 };
