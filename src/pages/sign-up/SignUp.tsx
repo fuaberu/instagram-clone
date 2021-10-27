@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import style from './signUp.module.css';
 import OrDivider from '../../components/form/orDivider/OrDivider';
 import SubmitBtn from '../../components/form/SubmitBtn/SubmitBtn';
-import { auth, handleUserProfile, usersAuth } from '../../firebase/firebaseConfig';
+import { auth, handleUserProfile } from '../../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 
 const SignUp = () => {

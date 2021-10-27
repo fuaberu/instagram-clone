@@ -6,7 +6,6 @@ import Suggestions from '../../components/feed/suggestions/Suggestions';
 import { userInfo } from '../../App';
 import { collection, query, getDocs, where } from 'firebase/firestore';
 import { db } from '../../firebase/firebaseConfig';
-import { serialize } from 'v8';
 
 export interface Post {
 	mediaUrl: string;
