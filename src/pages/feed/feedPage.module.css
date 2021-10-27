@@ -1,6 +1,22 @@
 .feedMain {
 	padding-top: var(--headerHeight);
 }
+.loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--body);
+}
+.loader svg {
+	margin-top: calc(50vh - 28px);
+	margin-left: calc(50vw - 28px);
+}
+.mainContent {
+	width: 100%;
+	max-width: 600px;
+}
 .newStories {
 	display: flex;
 	flex-direction: column;
@@ -10,6 +26,7 @@
 }
 .newStories img {
 	border-radius: 50%;
+	object-fit: cover;
 	width: 56px;
 	height: 56px;
 	margin: 4px;
@@ -24,6 +41,7 @@
 .feedPosts {
 	border-radius: var(--borderRadius);
 	margin: 30px auto 24px auto;
+	width: 100%;
 	max-width: 600px;
 	overflow: hidden;
 }
