@@ -48,18 +48,20 @@ export const signUpUser = (email: string, password: string) => {
 };
 
 // users profiles
-export interface usersAuth {
+export interface UsersAuth {
 	uid: string;
-	userName?: string | null;
+	userName?: string;
 	displayName: string | null;
 	email: string | null;
+	posts?: [];
+	stories?: [];
 	following?: number[];
 	followers?: number[];
 	profilePicture?: string;
 	createdDate?: number;
 }
 
-export const handleUserProfile = async (usersAuth: usersAuth) => {
+export const handleUserProfile = async (usersAuth: UsersAuth) => {
 	if (!usersAuth) return;
 	const userRef = doc(db, 'users', `${usersAuth.uid}`);
 	const docSnap = await getDoc(userRef);
@@ -94,6 +96,12 @@ export const handleUserProfile = async (usersAuth: usersAuth) => {
 	return docSnap.data();
 };
 
+export const getUserData = async (user: string) => {
+	const userRef = doc(db, 'users', user);
+	const docSnap = await getDoc(userRef);
+	return docSnap.data();
+};
+
 export const handleSignOut = () => {
 	signOut(auth).then(() => {
 		alert('sign-Out successful');
@@ -103,20 +111,27 @@ export const handleSignOut = () => {
 
 //follow user
 export const handleFollow = async (currentUser: string, toFollow: string) => {
-	const usersRef = doc(db, 'users', currentUser);
+	const currentUserRef = doc(db, 'users', currentUser);
+	const toFollowUserRef = doc(db, 'users', toFollow);
 
-	console.log(currentUser, toFollow);
-	await updateDoc(usersRef, {
+	await updateDoc(currentUserRef, {
 		following: arrayUnion(toFollow),
+	});
+	await updateDoc(toFollowUserRef, {
+		followers: arrayUnion(currentUser),
 	});
 };
 
 //unfollow user
 export const handleUnfollow = async (currentUser: string, toUnfollow: string) => {
-	const usersRef = doc(db, 'users', currentUser);
+	const currentUserRef = doc(db, 'users', currentUser);
+	const toFollowUserRef = doc(db, 'users', toUnfollow);
 
-	await updateDoc(usersRef, {
+	await updateDoc(currentUserRef, {
 		following: arrayRemove(toUnfollow),
+	});
+	await updateDoc(toFollowUserRef, {
+		followers: arrayRemove(currentUser),
 	});
 };
 

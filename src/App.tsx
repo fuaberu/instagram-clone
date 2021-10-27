@@ -8,6 +8,7 @@ import Explore from './pages/explore/Explore';
 import Inbox from './pages/inbox/Inbox';
 import { auth, handleUserProfile } from './firebase/firebaseConfig';
 import { onAuthStateChanged } from '@firebase/auth';
+import Profile from './pages/profile/Profile';
 
 export interface UserState {
 	uid: string;
@@ -90,6 +91,14 @@ function App() {
 						render={() => (
 							<Layout>
 								<Inbox />
+							</Layout>
+						)}
+					/>
+					<Route
+						path="/profile/:userId"
+						render={() => (
+							<Layout>
+								<Profile />
 							</Layout>
 						)}
 					/>

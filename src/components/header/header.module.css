@@ -27,13 +27,21 @@
 }
 .profile {
 	width: 22px;
+	height: 22px;
+	object-fit: cover;
+	border-radius: 50%;
 	cursor: pointer;
 }
 .profileActive {
 	width: 22px;
+	height: 22px;
+	object-fit: cover;
 	cursor: pointer;
 	border-radius: 50%;
 	border: 1px solid rgb(0, 0, 0);
+}
+.logOut {
+	border-top: 1px solid var(--darkBody);
 }
 .logo a {
 	height: fit-content;

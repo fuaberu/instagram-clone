@@ -1,0 +1,76 @@
+.mainProfile {
+	padding-top: var(--headerHeight);
+	max-width: 975px;
+	margin: auto;
+}
+.header {
+	padding: 30px 0;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	justify-items: center;
+	border-bottom: 1px solid var(--darkBody);
+}
+.profileImage {
+	object-fit: cover;
+	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+}
+.profileSection {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	align-items: center;
+	justify-items: stretch;
+	align-content: space-evenly;
+}
+.profileSection h2 {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+.postsContainer {
+	margin: 30px auto;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 293px));
+	grid-auto-rows: minmax(0, 293px);
+	grid-gap: 28px;
+}
+.postsContainer img {
+	width: 30vw;
+	height: 30vw;
+	max-width: 293px;
+	max-height: 293px;
+	object-fit: cover;
+}
+.popupScreen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+}
+.popupForm {
+	width: 90vw;
+	max-width: 400px;
+	min-height: 30vh;
+	background-color: var(--white);
+	border-radius: 12px;
+	padding: 25px;
+	margin: 30vh auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+.loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--body);
+}
+.loader svg {
+	margin-top: calc(50vh - 28px);
+	margin-left: calc(50vw - 28px);
+}
